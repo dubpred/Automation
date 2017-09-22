@@ -23,10 +23,13 @@ import javax.swing.JFrame;
 
 public class GUI extends JFrame {
 
-	static int [][] grid = new int[4][4];
+	
 	ArrayList <Circle> circleList = new ArrayList <Circle>();
+	double mouseXPOS;
+	double mouseYPOS;
 	
 	public static void drawFrame(){
+		
 		JFrame frame = new GUI();
 		frame.setSize(400, 400);
 		frame.setVisible(true);
@@ -36,9 +39,9 @@ public class GUI extends JFrame {
 		     public void mouseClicked(MouseEvent e) {
 		    	PointerInfo mouse = MouseInfo.getPointerInfo();
 		 		Point currentPoint = mouse.getLocation();
-		 		double x = currentPoint.getX();
-		 		double y = currentPoint.getY();
-		 		System.out.println("x"+x+"y"+y);
+		 		double mouseXPOS = currentPoint.getX();
+		 		double mouseYPOS = currentPoint.getY();
+		 		System.out.println(mouseXPOS+"    "+mouseYPOS);
 		     }
 		  });
 	}
@@ -49,26 +52,35 @@ public class GUI extends JFrame {
 		int xIncrement = 0;
 		int yIncrement = 0;
 		
-		Random random = new Random();
 		
-		//populate grid with circles 	
+		
+		
+		
+		//populate grid with circles 
+		int [][] grid = new int[4][4];
 		for (int i = 0; i< grid.length;i++){
 			for(int j = 0; j<grid[i].length;j++){
 				
 				//Creates random Color
-				int randR = random.nextInt(255)+1;
-				int randG = random.nextInt(255)+1;
-				int randB = random.nextInt(255)+1;
-				Color color = new Color(randR, randG, randB);
+				Random random = new Random();
+				int randomColor = random.nextInt(3)+1;
+				Color currentColor = Color.ORANGE; 
 				
+				switch(randomColor){
+				case 1: currentColor = Color.RED;
+				break;
+				case 2: currentColor = Color.BLUE;
+				break;
+				case 3: currentColor = Color.GREEN;
+				break;
+				}
+				ga.setColor(currentColor);
 				
 				Ellipse2D circle = new Ellipse2D.Float(xIncrement, yIncrement, 100, 100);
-				ga.draw(circle);
 				ga.fill(circle);
-				ga.setColor(color);
+				ga.draw(circle);
 				
-				
-				Circle circleS = new Circle(xIncrement,yIncrement,color);
+				Circle circleS = new Circle(xIncrement,yIncrement,currentColor);
 				circleList.add(circleS);
 				yIncrement +=100;
 				 
@@ -93,6 +105,30 @@ public class GUI extends JFrame {
 		 ga.draw(new Line2D.Double(300, 0, 300, 800));
 		 
 		
+	}
+
+	public ArrayList<Circle> getCircleList() {
+		return circleList;
+	}
+
+	public void setCircleList(ArrayList<Circle> circleList) {
+		this.circleList = circleList;
+	}
+
+	public double getMouseXPOS() {
+		return mouseXPOS;
+	}
+
+	public void setMouseXPOS(double mouseXPOS) {
+		this.mouseXPOS = mouseXPOS;
+	}
+
+	public double getMouseYPOS() {
+		return mouseYPOS;
+	}
+
+	public void setMouseYPOS(double mouseYPOS) {
+		this.mouseYPOS = mouseYPOS;
 	}
 	
 }
