@@ -4,7 +4,14 @@ import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.PointerInfo;
 import java.awt.Shape;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
@@ -25,6 +32,15 @@ public class GUI extends JFrame {
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
+		frame.addMouseListener(new MouseAdapter() {
+		     public void mouseClicked(MouseEvent e) {
+		    	PointerInfo mouse = MouseInfo.getPointerInfo();
+		 		Point currentPoint = mouse.getLocation();
+		 		double x = currentPoint.getX();
+		 		double y = currentPoint.getY();
+		 		System.out.println("x"+x+"y"+y);
+		     }
+		  });
 	}
 	
 	public void paint(Graphics g){
@@ -50,6 +66,7 @@ public class GUI extends JFrame {
 				ga.draw(circle);
 				ga.fill(circle);
 				ga.setColor(color);
+				
 				
 				Circle circleS = new Circle(xIncrement,yIncrement,color);
 				circleList.add(circleS);
@@ -77,4 +94,5 @@ public class GUI extends JFrame {
 		 
 		
 	}
-	}
+	
+}
