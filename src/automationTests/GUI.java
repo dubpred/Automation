@@ -54,7 +54,7 @@ public class GUI extends JFrame {
 				Circle circleS = new Circle(xIncrement,yIncrement,color);
 				circleList.add(circleS);
 				yIncrement +=100;
-				
+				 
 				
 			}
 			yIncrement = 0; 
