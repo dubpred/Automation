@@ -1,5 +1,6 @@
 package automationTests;
 
+import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
@@ -16,104 +17,118 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.Random;
-import java.awt.geom.Ellipse2D.Float;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import java.awt.geom.Ellipse2D.Float;
 
 
-public class GUI extends JFrame {
+
+
+
+public class GUI extends JFrame{
 
 	
-	ArrayList <Circle> circleList = new ArrayList <Circle>();
+
+	private static int frameX; 
+	private static int frameY; 
+	
 	double mouseXPOS;
 	double mouseYPOS;
 	
-	public static void drawFrame(){
+	public GUI(){
 		
-		JFrame frame = new GUI();
-		frame.setSize(400, 400);
-		frame.setVisible(true);
-		frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setSize(400, 400);
+		setVisible(true);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		frame.addMouseListener(new MouseAdapter() {
+//			frameX = frame.getX();
+//			frameY = frame.getY();
+			 addMouseListener(new MouseAdapter() {
 		     public void mouseClicked(MouseEvent e) {
 		    	PointerInfo mouse = MouseInfo.getPointerInfo();
 		 		Point currentPoint = mouse.getLocation();
-		 		double mouseXPOS = currentPoint.getX();
-		 		double mouseYPOS = currentPoint.getY();
+		 		int mouseXPOS = (int) currentPoint.getX();
+		 		int mouseYPOS = (int) currentPoint.getY();
 		 		System.out.println(mouseXPOS+"    "+mouseYPOS);
+		 		
+		 		if(0 < mouseXPOS && mouseXPOS < 99){
+		 			mouseXPOS = 0;
+		 		}
+		 		else if (100 < mouseXPOS && mouseXPOS < 199 ){
+		 			mouseXPOS = 1;
+		 		}
+		 		else if (200 < mouseXPOS && mouseXPOS < 299 ){
+		 			mouseXPOS = 2;
+		 		}
+		 		else {
+		 			mouseXPOS = 3;
+		 		}
+		 		if(0 < mouseYPOS && mouseYPOS < 99){
+		 			mouseYPOS = 0;
+		 		}
+		 		else if (100 < mouseYPOS && mouseYPOS < 199 ){
+		 			mouseYPOS = 1;
+		 		}
+		 		else if (200 < mouseYPOS && mouseYPOS < 299 ){
+		 			mouseYPOS = 2;
+		 		}
+		 		else {
+		 			mouseYPOS =3;
+		 		}
+		 		
+		 		
+		 		GridPopulator.Replace(mouseXPOS,mouseYPOS);
+		 		revalidate();
+		 		repaint();
+				
+		 		
+		 		
 		     }
 		  });
 	}
 	
 	public void paint(Graphics g){
-		Graphics2D ga = (Graphics2D)g;
+		
+		
+
+		
+		
+		//draw grid
+		 g.drawLine(0, 100, 500, 100);
+		 g.drawLine(0, 200, 500, 200);
+		 g.drawLine(0, 300, 500, 300);
+		 g.drawLine(100, 0, 100, 800);
+		 g.drawLine(200, 0, 200, 800);
+		 g.drawLine(300, 0, 300, 800);
+		
+		//populate grid with circles 
+		 
+		
+		
+
 		
 		int xIncrement = 0;
 		int yIncrement = 0;
 		
 		
-		
-		
-		
-		//populate grid with circles 
-		int [][] grid = new int[4][4];
-		for (int i = 0; i< grid.length;i++){
-			for(int j = 0; j<grid[i].length;j++){
-				
-				//Creates random Color
-				Random random = new Random();
-				int randomColor = random.nextInt(3)+1;
-				Color currentColor = Color.ORANGE; 
-				
-				switch(randomColor){
-				case 1: currentColor = Color.RED;
-				break;
-				case 2: currentColor = Color.BLUE;
-				break;
-				case 3: currentColor = Color.GREEN;
-				break;
-				}
-				ga.setColor(currentColor);
-				
-				Ellipse2D circle = new Ellipse2D.Float(xIncrement, yIncrement, 100, 100);
-				ga.fill(circle);
-				ga.draw(circle);
-				
-				Circle circleS = new Circle(xIncrement,yIncrement,currentColor);
-				circleList.add(circleS);
-				yIncrement +=100;
-				 
+		for (int i = 0; i < 4; i++){
+			for(int j = 0; j < 4; j++){
+				Color c = GridPopulator.getMultiDim().get(i).get(j).getColor();
+				g.setColor(c);
+				g.fillOval(xIncrement, yIncrement, 100, 100);
+				yIncrement += 100;
 				
 			}
 			yIncrement = 0; 
 			xIncrement += 100; 
 		}
 		
-		 System.out.println(circleList.size());
 		 
-		 
-		
-		
-		//draw grid
-		 ga.setColor(Color.black);
-		 ga.draw(new Line2D.Double(0, 100, 500, 100));
-		 ga.draw(new Line2D.Double(0, 200, 500, 200));
-		 ga.draw(new Line2D.Double(0, 300, 500, 300));
-		 ga.draw(new Line2D.Double(100, 0, 100, 800));
-		 ga.draw(new Line2D.Double(200, 0, 200, 800));
-		 ga.draw(new Line2D.Double(300, 0, 300, 800));
-		 
-		
 	}
+	
 
-	public ArrayList<Circle> getCircleList() {
-		return circleList;
-	}
-
-	public void setCircleList(ArrayList<Circle> circleList) {
-		this.circleList = circleList;
-	}
 
 	public double getMouseXPOS() {
 		return mouseXPOS;
@@ -131,4 +146,19 @@ public class GUI extends JFrame {
 		this.mouseYPOS = mouseYPOS;
 	}
 	
+	public static int getFrameX() {
+		return frameX;
+	}
+
+	public static void setFrameX(int frameX) {
+		GUI.frameX = frameX;
+	}
+
+	public static int getFrameY() {
+		return frameY;
+	}
+
+	public static void setFrameY(int frameY) {
+		GUI.frameY = frameY;
+	}
 }
